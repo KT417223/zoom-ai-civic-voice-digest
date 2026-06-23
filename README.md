@@ -62,6 +62,12 @@ Copy-Item .env.example .env
 civic-voice-digest --audio-url "https://example.com/sample.mp3" --source-title "声の広報サンプル"
 ```
 
+## モックアップ
+
+実装前の完成イメージとして、静的HTMLのモックアップを用意しています。
+
+- [mockups/index.html](mockups/index.html)
+
 ## Qiita記事向けメモ
 
 - 公開音声を「引用」ではなく「技術検証の題材として参照」と表現する

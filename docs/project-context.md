@@ -113,6 +113,7 @@ Qiitaイベントの選出基準に合わせて、記事では以下を意識す
 - `README.md`: 企画概要
 - `docs/sources.md`: 公開音声候補
 - `docs/article-outline.md`: Qiita記事構成案
+- `mockups/index.html`: 完成イメージ確認用の静的HTMLモックアップ
 - `src/civic_voice_digest/cli.py`: CLI雛形
 - `src/civic_voice_digest/pipeline.py`: API接続前の処理計画データ構造
 

@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Civic Voice Digest Mockup</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f8f3;
+        --panel: #ffffff;
+        --panel-soft: #f1f5f0;
+        --text: #20251f;
+        --muted: #677064;
+        --line: #d9dfd4;
+        --accent: #0f766e;
+        --accent-strong: #115e59;
+        --accent-soft: #d9f2ee;
+        --warn: #9a5b00;
+        --warn-soft: #fff1d6;
+        --blue: #315f95;
+        --blue-soft: #dfeafa;
+        --red: #9a3f3f;
+        --red-soft: #fae3e1;
+        --shadow: 0 16px 44px rgba(32, 37, 31, 0.1);
+        font-family:
+          "Segoe UI",
+          "Yu Gothic UI",
+          "Hiragino Kaku Gothic ProN",
+          Meiryo,
+          sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        letter-spacing: 0;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+      }
+
+      .sidebar {
+        background: #21312e;
+        color: #f6fbf8;
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        background:
+          linear-gradient(90deg, transparent 18%, rgba(255, 255, 255, 0.32) 18% 22%, transparent 22% 34%, rgba(255, 255, 255, 0.32) 34% 38%, transparent 38% 50%, rgba(255, 255, 255, 0.32) 50% 54%, transparent 54%),
+          #0f766e;
+        position: relative;
+      }
+
+      .mark::after {
+        content: "";
+        position: absolute;
+        inset: 13px 10px;
+        border-top: 3px solid #f6fbf8;
+        border-bottom: 3px solid #f6fbf8;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.25;
+        font-weight: 700;
+      }
+
+      .brand p {
+        margin: 3px 0 0;
+        color: #bad0ca;
+        font-size: 12px;
+      }
+
+      .nav {
+        display: grid;
+        gap: 6px;
+      }
+
+      .nav button {
+        height: 40px;
+        border-radius: 8px;
+        padding: 0 12px;
+        color: #e8f2ee;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+      }
+
+      .nav button.active,
+      .nav button:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .ico {
+        width: 18px;
+        height: 18px;
+        display: inline-grid;
+        place-items: center;
+        flex: 0 0 auto;
+      }
+
+      .ico svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .side-card {
+        margin-top: auto;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .side-card strong {
+        display: block;
+        font-size: 13px;
+      }
+
+      .side-card span {
+        display: block;
+        margin-top: 6px;
+        color: #c8d9d4;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      main {
+        min-width: 0;
+        padding: 24px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .title h2 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.2;
+      }
+
+      .title p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .btn {
+        height: 38px;
+        border-radius: 8px;
+        padding: 0 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        color: var(--text);
+        box-shadow: 0 3px 10px rgba(32, 37, 31, 0.06);
+      }
+
+      .btn.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+
+      .btn.primary:hover {
+        background: var(--accent-strong);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+
+      .panel-header {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .panel-header h3 {
+        margin: 0;
+        font-size: 15px;
+      }
+
+      .panel-body {
+        padding: 18px;
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+        margin-bottom: 16px;
+      }
+
+      .field label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .field input,
+      .field select {
+        width: 100%;
+        height: 40px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--text);
+        padding: 0 11px;
+      }
+
+      .source-box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-soft);
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .source-box p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .source-title {
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .pipeline {
+        display: grid;
+        gap: 12px;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .step .dot {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        display: grid;
+        place-items: center;
+      }
+
+      .step strong {
+        display: block;
+        font-size: 13px;
+      }
+
+      .step span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .badge {
+        border-radius: 999px;
+        padding: 4px 9px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .badge.done {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+      }
+
+      .badge.wait {
+        background: var(--warn-soft);
+        color: var(--warn);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 6px;
+        padding: 10px;
+        border-bottom: 1px solid var(--line);
+        overflow-x: auto;
+      }
+
+      .tab {
+        height: 34px;
+        border-radius: 8px;
+        padding: 0 12px;
+        color: var(--muted);
+        background: transparent;
+        white-space: nowrap;
+      }
+
+      .tab.active {
+        background: var(--text);
+        color: #fff;
+      }
+
+      .view {
+        display: none;
+      }
+
+      .view.active {
+        display: block;
+      }
+
+      .digest-layout {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .notice {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        background: #fff;
+        min-height: 170px;
+      }
+
+      .notice h4 {
+        margin: 0 0 10px;
+        font-size: 15px;
+      }
+
+      .notice p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 13px;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .chip {
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: var(--panel-soft);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .chip.blue {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+
+      .chip.red {
+        background: var(--red-soft);
+        color: var(--red);
+      }
+
+      .transcript {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .line {
+        display: grid;
+        grid-template-columns: 82px minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        line-height: 1.6;
+        font-size: 13px;
+      }
+
+      .line:last-child {
+        border-bottom: 0;
+      }
+
+      .time {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        background: #fff;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 24px;
+      }
+
+      .json-box {
+        overflow: auto;
+        margin: 0;
+        padding: 16px;
+        background: #182320;
+        color: #e7f5ef;
+        border-radius: 8px;
+        line-height: 1.55;
+        font-size: 13px;
+      }
+
+      .toast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        background: #182320;
+        color: #fff;
+        box-shadow: var(--shadow);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: 0.18s ease;
+        pointer-events: none;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 980px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          padding: 14px;
+          gap: 12px;
+        }
+
+        .nav {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .nav button {
+          justify-content: center;
+          padding: 0 8px;
+        }
+
+        .nav span.label,
+        .side-card {
+          display: none;
+        }
+
+        main {
+          padding: 18px;
+        }
+
+        .grid,
+        .digest-layout,
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .topbar {
+          display: grid;
+        }
+
+        .title h2 {
+          font-size: 22px;
+        }
+
+        .actions {
+          justify-content: stretch;
+        }
+
+        .btn {
+          justify-content: center;
+          flex: 1 1 auto;
+        }
+
+        .step {
+          grid-template-columns: 34px minmax(0, 1fr);
+        }
+
+        .step .badge {
+          grid-column: 2;
+          justify-self: start;
+        }
+
+        .line {
+          grid-template-columns: 1fr;
+          gap: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="mark" aria-hidden="true"></div>
+          <div>
+            <h1>Civic Voice Digest</h1>
+            <p>Zoom AI Services mockup</p>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="画面ナビゲーション">
+          <button class="active" type="button" data-jump="input">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h9l5 5v11.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5z"/><path d="M14 3v6h6"/></svg>
+            </span>
+            <span class="label">入力</span>
+          </button>
+          <button type="button" data-jump="digest">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/></svg>
+            </span>
+            <span class="label">要約</span>
+          </button>
+          <button type="button" data-jump="transcript">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M8 7v10"/><path d="M4 10v4"/><path d="M16 6v12"/><path d="M20 9v6"/></svg>
+            </span>
+            <span class="label">文字起こし</span>
+          </button>
+          <button type="button" data-jump="metrics">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16v-5"/><path d="M13 16V8"/><path d="M18 16v-3"/></svg>
+            </span>
+            <span class="label">検証</span>
+          </button>
+        </nav>
+
+        <div class="side-card">
+          <strong>記事用の見せ場</strong>
+          <span>公開MP3を再配布せず、出典リンクと処理結果の短い例だけで再現性を出す。</span>
+        </div>
+      </aside>
+
+      <main>
+        <section class="topbar">
+          <div class="title">
+            <h2>自治体音声広報を多言語ダイジェスト化</h2>
+            <p>公開MP3を Scribe、Summarizer、Translator に通し、住民向けのお知らせを構造化します。</p>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" id="copyButton" title="JSONをコピー">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="10" height="10" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </span>
+              JSONコピー
+            </button>
+            <button class="btn primary" type="button" id="runButton">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+              デモ実行
+            </button>
+          </div>
+        </section>
+
+        <section class="grid">
+          <div class="panel" id="input">
+            <div class="panel-header">
+              <h3>入力ソース</h3>
+              <span class="badge done">公開ページ参照</span>
+            </div>
+            <div class="panel-body">
+              <div class="field">
+                <label for="source">自治体音声ページ</label>
+                <select id="source">
+                  <option>藤沢市「声の広報ふじさわ」</option>
+                  <option>小平市「市報音声版『声のたより』」</option>
+                  <option>所沢市「広報ところざわ 音声版」</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="audio">MP3 URL</label>
+                <input id="audio" value="https://example.municipal.jp/voice/koho-2026-06-10-01.mp3" />
+              </div>
+              <div class="field">
+                <label for="lang">翻訳先</label>
+                <select id="lang">
+                  <option value="en">English</option>
+                  <option value="zh">中文</option>
+                  <option value="ko">한국어</option>
+                </select>
+              </div>
+              <div class="source-box">
+                <div class="source-title">参照方針</div>
+                <p>音声ファイル自体は再配布せず、元ページへのリンクと短い出力例のみを記事に掲載します。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>処理パイプライン</h3>
+              <span class="badge wait" id="statusBadge">待機中</span>
+            </div>
+            <div class="panel-body">
+              <div class="pipeline">
+                <div class="step">
+                  <div class="dot">
+                    <span class="ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M8 7v10"/><path d="M4 10v4"/><path d="M16 6v12"/><path d="M20 9v6"/></svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Scribe</strong>
+                    <span>公開MP3から日本語文字起こしを生成</span>
+                  </div>
+                  <span class="badge done">完了例</span>
+                </div>
+                <div class="step">
+                  <div class="dot">
+                    <span class="ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/></svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Summarizer</strong>
+                    <span>重要なお知らせ、期限、対象者、手続きを抽出</span>
+                  </div>
+                  <span class="badge done">完了例</span>
+                </div>
+                <div class="step">
+                  <div class="dot">
+                    <span class="ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Translator</strong>
+                    <span>英語などの多言語ダイジェストに変換</span>
+                  </div>
+                  <span class="badge done">完了例</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="digest" style="margin-top: 18px">
+          <div class="tabs" role="tablist" aria-label="結果表示">
+            <button class="tab active" type="button" data-tab="ja">日本語ダイジェスト</button>
+            <button class="tab" type="button" data-tab="en">English Digest</button>
+            <button class="tab" type="button" data-tab="json">JSON</button>
+          </div>
+          <div class="panel-body">
+            <div class="view active" data-view="ja">
+              <div class="digest-layout">
+                <article class="notice">
+                  <h4>子育て世帯向け給付金の申請</h4>
+                  <p>対象世帯はオンラインまたは窓口で申請できます。申請には本人確認書類と振込先口座の確認書類が必要です。</p>
+                  <div class="meta">
+                    <span class="chip blue">対象: 子育て世帯</span>
+                    <span class="chip red">期限: 7月31日</span>
+                  </div>
+                </article>
+                <article class="notice">
+                  <h4>防災訓練と避難所開設の案内</h4>
+                  <p>市内3会場で防災訓練を実施します。参加者は動きやすい服装で、飲み物を持参してください。</p>
+                  <div class="meta">
+                    <span class="chip blue">対象: 市内在住者</span>
+                    <span class="chip">場所: 市民センターほか</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div class="view" data-view="en">
+              <div class="digest-layout">
+                <article class="notice">
+                  <h4>Benefit Application for Households with Children</h4>
+                  <p>Eligible households can apply online or at the city office. Applicants need identification and bank account documents.</p>
+                  <div class="meta">
+                    <span class="chip blue">Audience: Families with children</span>
+                    <span class="chip red">Due: July 31</span>
+                  </div>
+                </article>
+                <article class="notice">
+                  <h4>Disaster Drill and Evacuation Site Notice</h4>
+                  <p>The city will hold disaster drills at three locations. Participants should wear comfortable clothing and bring drinks.</p>
+                  <div class="meta">
+                    <span class="chip blue">Audience: City residents</span>
+                    <span class="chip">Place: Civic Center and others</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div class="view" data-view="json">
+              <pre class="json-box" id="jsonOutput">{
+  "source": "藤沢市「声の広報ふじさわ」",
+  "notices": [
+    {
+      "title": "子育て世帯向け給付金の申請",
+      "audience": "子育て世帯",
+      "deadline": "7月31日",
+      "translation": "Benefit Application for Households with Children"
+    },
+    {
+      "title": "防災訓練と避難所開設の案内",
+      "audience": "市内在住者",
+      "deadline": null,
+      "translation": "Disaster Drill and Evacuation Site Notice"
+    }
+  ]
+}</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="transcript" style="margin-top: 18px">
+          <div class="panel-header">
+            <h3>文字起こし抜粋</h3>
+            <span class="badge done">Scribe出力例</span>
+          </div>
+          <div class="panel-body">
+            <div class="transcript">
+              <div class="line">
+                <span class="time">00:01:12</span>
+                <span>子育て世帯向け給付金の申請を受け付けています。申請期限は七月三十一日です。</span>
+              </div>
+              <div class="line">
+                <span class="time">00:02:48</span>
+                <span>防災訓練は市民センター、北部会館、南部公民館の三会場で行います。</span>
+              </div>
+              <div class="line">
+                <span class="time">00:04:05</span>
+                <span>詳しくは市のホームページ、または広報課までお問い合わせください。</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="metrics" style="margin-top: 18px">
+          <div class="panel-header">
+            <h3>検証メトリクス</h3>
+            <span class="badge done">記事化ポイント</span>
+          </div>
+          <div class="panel-body">
+            <div class="metrics">
+              <div class="metric">
+                <span>固有名詞抽出</span>
+                <strong>8/9</strong>
+              </div>
+              <div class="metric">
+                <span>期限抽出</span>
+                <strong>3/3</strong>
+              </div>
+              <div class="metric">
+                <span>音声長</span>
+                <strong>12m</strong>
+              </div>
+              <div class="metric">
+                <span>想定処理</span>
+                <strong>3 API</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast">コピーしました</div>
+
+    <script>
+      const tabs = document.querySelectorAll(".tab");
+      const views = document.querySelectorAll(".view");
+      const navButtons = document.querySelectorAll(".nav button");
+      const runButton = document.querySelector("#runButton");
+      const copyButton = document.querySelector("#copyButton");
+      const statusBadge = document.querySelector("#statusBadge");
+      const toast = document.querySelector("#toast");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((item) => item.classList.remove("active"));
+          views.forEach((view) => view.classList.remove("active"));
+          tab.classList.add("active");
+          document.querySelector(`[data-view="${tab.dataset.tab}"]`).classList.add("active");
+        });
+      });
+
+      navButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          navButtons.forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          document.querySelector(`#${button.dataset.jump}`).scrollIntoView({ behavior: "smooth" });
+        });
+      });
+
+      runButton.addEventListener("click", () => {
+        statusBadge.textContent = "処理中";
+        statusBadge.className = "badge wait";
+        window.setTimeout(() => {
+          statusBadge.textContent = "デモ完了";
+          statusBadge.className = "badge done";
+          showToast("デモ結果を更新しました");
+        }, 650);
+      });
+
+      copyButton.addEventListener("click", async () => {
+        const json = document.querySelector("#jsonOutput").textContent;
+        try {
+          await navigator.clipboard.writeText(json);
+          showToast("JSONをコピーしました");
+        } catch {
+          showToast("コピーできませんでした");
+        }
+      });
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        window.setTimeout(() => toast.classList.remove("show"), 1800);
+      }
+    </script>
+  </body>
+</html>
