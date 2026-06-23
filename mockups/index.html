@@ -343,7 +343,6 @@
         display: flex;
         flex-wrap: wrap;
         gap: 7px;
-        margin-bottom: 16px;
       }
 
       .format {
@@ -354,6 +353,19 @@
         color: var(--muted);
         font-size: 12px;
         font-weight: 700;
+      }
+
+      .hint-block {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .hint-block p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
       }
 
       .source-box {
@@ -377,9 +389,23 @@
         color: var(--text);
       }
 
+      .source-link {
+        word-break: break-all;
+        color: var(--accent-strong);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
       .pipeline {
         display: grid;
         gap: 12px;
+      }
+
+      .pipeline-note {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
       }
 
       .step {
@@ -412,6 +438,22 @@
         margin-top: 3px;
         color: var(--muted);
         font-size: 12px;
+      }
+
+      .io {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .io-chip {
+        border-radius: 999px;
+        padding: 4px 8px;
+        background: var(--panel-soft);
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
       }
 
       .badge {
@@ -714,7 +756,7 @@
         <section class="topbar">
           <div class="title">
             <h2>自治体音声広報を多言語ダイジェスト化</h2>
-            <p>公開MP3を Scribe、Summarizer、Translator に通し、住民向けのお知らせを構造化します。</p>
+            <p>公開音声や手元ファイルを、文字起こし、要約、翻訳の順で住民向けのお知らせに整えます。</p>
           </div>
           <div class="actions">
             <button class="btn" type="button" id="copyButton" title="JSONをコピー">
@@ -739,13 +781,10 @@
               <span class="badge done">公開ページ参照</span>
             </div>
             <div class="panel-body">
-              <div class="field">
-                <label for="source">自治体音声ページ</label>
-                <select id="source">
-                  <option>藤沢市「声の広報ふじさわ」</option>
-                  <option>小平市「市報音声版『声のたより』」</option>
-                  <option>所沢市「広報ところざわ 音声版」</option>
-                </select>
+              <div class="source-box" style="margin-bottom: 16px">
+                <div class="source-title">参照元の例</div>
+                <p>藤沢市「声の広報ふじさわ」など、自治体が公開している音声版広報を題材にします。</p>
+                <div class="source-link">https://www.city.fujisawa.kanagawa.jp/.../koe/podcast.html</div>
               </div>
               <div class="segmented" aria-label="取り込み方法">
                 <button class="segment active" type="button" data-mode="url">URL</button>
@@ -770,13 +809,14 @@
                   <textarea id="transcriptInput">市報音声版の文字起こし済みテキストを貼り付けると、要約と翻訳だけを実行できます。</textarea>
                 </div>
               </div>
-              <div class="format-list" aria-label="対応予定形式">
-                <span class="format">mp3</span>
-                <span class="format">m4a</span>
-                <span class="format">wav</span>
-                <span class="format">webm</span>
-                <span class="format">mp4</span>
-                <span class="format">txt</span>
+              <div class="hint-block">
+                <p><strong>対応予定の入力</strong>: 実際の対応可否はZoom AI ServicesのAPI仕様を確認して決めます。</p>
+                <div class="format-list" aria-label="対応予定形式">
+                  <span class="format">音声URL</span>
+                  <span class="format">音声ファイル</span>
+                  <span class="format">動画ファイル</span>
+                  <span class="format">文字起こしテキスト</span>
+                </div>
               </div>
               <div class="field">
                 <label for="lang">翻訳先</label>
@@ -799,6 +839,9 @@
               <span class="badge wait" id="statusBadge">待機中</span>
             </div>
             <div class="panel-body">
+              <p class="pipeline-note">
+                音声をいきなり翻訳するのではなく、まず文字に起こし、必要な情報だけに要約し、最後に多言語化します。
+              </p>
               <div class="pipeline">
                 <div class="step">
                   <div class="dot">
@@ -808,7 +851,11 @@
                   </div>
                   <div>
                     <strong>Scribe</strong>
-                    <span>公開MP3から日本語文字起こしを生成</span>
+                    <span>音声や動画の話し言葉を、後続処理で扱えるテキストに変換します。</span>
+                    <div class="io">
+                      <span class="io-chip">入力: 音声/動画</span>
+                      <span class="io-chip">出力: 文字起こし</span>
+                    </div>
                   </div>
                   <span class="badge done">完了例</span>
                 </div>
@@ -820,7 +867,11 @@
                   </div>
                   <div>
                     <strong>Summarizer</strong>
-                    <span>重要なお知らせ、期限、対象者、手続きを抽出</span>
+                    <span>長い文字起こしから、住民が見るべきお知らせだけを構造化します。</span>
+                    <div class="io">
+                      <span class="io-chip">入力: 文字起こし</span>
+                      <span class="io-chip">出力: 要約JSON</span>
+                    </div>
                   </div>
                   <span class="badge done">完了例</span>
                 </div>
@@ -832,7 +883,11 @@
                   </div>
                   <div>
                     <strong>Translator</strong>
-                    <span>英語などの多言語ダイジェストに変換</span>
+                    <span>要約済みのお知らせを、英語などの読みやすいダイジェストにします。</span>
+                    <div class="io">
+                      <span class="io-chip">入力: 要約JSON</span>
+                      <span class="io-chip">出力: 多言語版</span>
+                    </div>
                   </div>
                   <span class="badge done">完了例</span>
                 </div>
