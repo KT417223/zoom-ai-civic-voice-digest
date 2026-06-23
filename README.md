@@ -69,3 +69,11 @@ civic-voice-digest --audio-url "https://example.com/sample.mp3" --source-title "
 - 自治体名、ページ名、URL、確認日を明記する
 - 出力例は短い抜粋または自前の要約結果に留める
 - APIキー、取得した音声ファイル、全文文字起こしはコミットしない
+
+## Codex向け引き継ぎ
+
+別マシンや別スレッドのCodexで作業するときは、まず以下を読んでください。
+
+- [docs/project-context.md](docs/project-context.md): これまでに決めたこと、方針、次にやること
+- [docs/sources.md](docs/sources.md): 参照候補の公開音声ページ
+- [docs/article-outline.md](docs/article-outline.md): Qiita記事の構成案
