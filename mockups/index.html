@@ -267,14 +267,93 @@
       }
 
       .field input,
-      .field select {
+      .field select,
+      .field textarea {
         width: 100%;
-        height: 40px;
         border: 1px solid var(--line);
         border-radius: 8px;
         background: #fff;
         color: var(--text);
+      }
+
+      .field input,
+      .field select {
+        height: 40px;
         padding: 0 11px;
+      }
+
+      .field textarea {
+        min-height: 92px;
+        resize: vertical;
+        padding: 10px 11px;
+        line-height: 1.55;
+      }
+
+      .segmented {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        padding: 5px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-soft);
+        margin-bottom: 16px;
+      }
+
+      .segment {
+        min-height: 34px;
+        border-radius: 7px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .segment.active {
+        background: #fff;
+        color: var(--accent-strong);
+        box-shadow: 0 3px 10px rgba(32, 37, 31, 0.08);
+      }
+
+      .input-mode {
+        display: none;
+      }
+
+      .input-mode.active {
+        display: block;
+      }
+
+      .dropzone {
+        border: 1px dashed #9fb4ad;
+        border-radius: 8px;
+        background: var(--panel-soft);
+        padding: 18px;
+        text-align: center;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .dropzone strong {
+        display: block;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .format-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 16px;
+      }
+
+      .format {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: #fff;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
       }
 
       .source-box {
@@ -668,9 +747,36 @@
                   <option>所沢市「広報ところざわ 音声版」</option>
                 </select>
               </div>
-              <div class="field">
-                <label for="audio">MP3 URL</label>
-                <input id="audio" value="https://example.municipal.jp/voice/koho-2026-06-10-01.mp3" />
+              <div class="segmented" aria-label="取り込み方法">
+                <button class="segment active" type="button" data-mode="url">URL</button>
+                <button class="segment" type="button" data-mode="file">ファイル</button>
+                <button class="segment" type="button" data-mode="text">テキスト</button>
+              </div>
+              <div class="input-mode active" data-input-mode="url">
+                <div class="field">
+                  <label for="audio">音声・動画URL</label>
+                  <input id="audio" value="https://example.municipal.jp/voice/koho-2026-06-10-01.mp3" />
+                </div>
+              </div>
+              <div class="input-mode" data-input-mode="file">
+                <div class="dropzone">
+                  <strong>音声または動画ファイルを選択</strong>
+                  mp3 / m4a / wav / webm / mp4 を想定。実装時はAPI仕様に合わせて検証します。
+                </div>
+              </div>
+              <div class="input-mode" data-input-mode="text">
+                <div class="field">
+                  <label for="transcriptInput">既存の文字起こし</label>
+                  <textarea id="transcriptInput">市報音声版の文字起こし済みテキストを貼り付けると、要約と翻訳だけを実行できます。</textarea>
+                </div>
+              </div>
+              <div class="format-list" aria-label="対応予定形式">
+                <span class="format">mp3</span>
+                <span class="format">m4a</span>
+                <span class="format">wav</span>
+                <span class="format">webm</span>
+                <span class="format">mp4</span>
+                <span class="format">txt</span>
               </div>
               <div class="field">
                 <label for="lang">翻訳先</label>
@@ -682,7 +788,7 @@
               </div>
               <div class="source-box">
                 <div class="source-title">参照方針</div>
-                <p>音声ファイル自体は再配布せず、元ページへのリンクと短い出力例のみを記事に掲載します。</p>
+                <p>公開URLを基本にしつつ、手元ファイルや既存文字起こしも扱える設計にします。音声ファイル自体は再配布しません。</p>
               </div>
             </div>
           </div>
@@ -862,6 +968,8 @@
       const tabs = document.querySelectorAll(".tab");
       const views = document.querySelectorAll(".view");
       const navButtons = document.querySelectorAll(".nav button");
+      const segments = document.querySelectorAll(".segment");
+      const inputModes = document.querySelectorAll(".input-mode");
       const runButton = document.querySelector("#runButton");
       const copyButton = document.querySelector("#copyButton");
       const statusBadge = document.querySelector("#statusBadge");
@@ -881,6 +989,15 @@
           navButtons.forEach((item) => item.classList.remove("active"));
           button.classList.add("active");
           document.querySelector(`#${button.dataset.jump}`).scrollIntoView({ behavior: "smooth" });
+        });
+      });
+
+      segments.forEach((segment) => {
+        segment.addEventListener("click", () => {
+          segments.forEach((item) => item.classList.remove("active"));
+          inputModes.forEach((mode) => mode.classList.remove("active"));
+          segment.classList.add("active");
+          document.querySelector(`[data-input-mode="${segment.dataset.mode}"]`).classList.add("active");
         });
       });
 
