@@ -1,19 +1,19 @@
 # Zoom AI Civic Voice Digest
 
-自治体が公開している「声の広報」「市報音声版」を題材に、Zoom AI Services の Scribe / Summarizer / Translator API で多言語ダイジェストを作る検証プロジェクトです。
+自治体が公開している「声の広報」「市報音声版」を題材に、Zoom AI Services を使った多言語ダイジェスト化の設計を検証するプロジェクトです。
 
 ## コンセプト
 
 自治体広報は生活に必要な情報が多く含まれていますが、音声版の内容をあとから検索したり、重要なお知らせだけ拾ったり、多言語で把握したりするには手間があります。
 
-このプロジェクトでは、公開されている音声版広報を入力として、以下の流れを試します。
+このプロジェクトでは、既存音声を直接APIに渡せるとは限らない前提で、文字起こし済みテキストを主入力にした以下の流れを試します。
 
-1. 公開URLまたは手元ファイルの音声・動画を Scribe API で文字起こしする
-2. Summarizer API で重要なお知らせ、対象者、期限、手続きを抽出する
-3. Translator API で英語などに翻訳する
+1. 文字起こし済みテキストを入力する
+2. 重要なお知らせ、対象者、期限、手続きを抽出する
+3. 英語などに翻訳する
 4. Markdown / JSON のダイジェストとして出力する
 
-当面は自治体サイトで公開されているMP3 URLを主な検証対象にします。設計上は `mp3`, `m4a`, `wav`, `webm`, `mp4` などの音声・動画ファイルと、既存の文字起こしテキスト貼り付けにも対応できる形を目指します。
+当面は既存の文字起こしテキストを主な検証対象にします。設計上は将来の入力アダプタとして、公開MP3 URL、手元の音声・動画ファイル、Zoom会議/録画由来の文字起こしにも対応できる形を目指します。
 
 ## 参考にする公開音声
 
@@ -33,7 +33,7 @@
 ## 記事タイトル案
 
 ```text
-自治体の「声の広報」をZoom AI Servicesで多言語ダイジェスト化してみた
+自治体の音声広報を多言語ダイジェスト化する設計をZoom AI Servicesで考えてみた
 ```
 
 ## 評価観点
@@ -61,8 +61,37 @@ Copy-Item .env.example .env
 現時点ではCLIの雛形のみです。実API接続はこれから実装します。
 
 ```powershell
-civic-voice-digest --audio-url "https://example.com/sample.mp3" --source-title "声の広報サンプル"
+civic-voice-digest --transcript-file "transcripts/sample.txt" --source-title "声の広報サンプル"
 ```
+
+API接続前に、Qiita記事用の出力イメージを確認するドライランも用意しています。
+
+```powershell
+civic-voice-digest `
+  --transcript-file "transcripts/sample.txt" `
+  --source-title "声の広報サンプル" `
+  --source-url "https://example.com/source-page" `
+  --target-language "en" `
+  --dry-run `
+  --output-dir "outputs/sample"
+```
+
+将来、既存音声URLを扱えることが確認できた場合:
+
+```powershell
+civic-voice-digest `
+  --audio-url "https://example.com/sample.mp3" `
+  --source-title "声の広報サンプル" `
+  --source-url "https://example.com/source-page" `
+  --target-language "en" `
+  --dry-run `
+  --output-dir "outputs/sample"
+```
+
+ドライランでは外部APIを呼ばず、以下のファイルを生成します。
+
+- `digest.json`
+- `digest.md`
 
 ## モックアップ
 
